@@ -1,0 +1,29 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:latest
+    container_name: postgres
+    environment:
+      POSTGRES_DB: mydb
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+    ports:
+      - 5432:5432
+    volumes:
+      - C:\postgres_container_data:/var/lib/postgresql/data
+    restart: always
+
+  backend:
+    build: .
+    container_name: testapp_container
+    ports:
+      - 8080:8080
+    environment:
+      db-url: jdbc:postgres://db:5432/mydb
+      db-username: admin
+      db-password: admin
+    depends_on:
+      - db
+    restart: always
+
+
